@@ -1,4 +1,4 @@
-%rnn dbscan 
+%rs dbscan 
 %clear;
 %dataall=load('kdd04_norm.txt');
 %dataall=load('aps_norm.txt');
@@ -17,27 +17,8 @@ dataall = load ('Skin.txt');
 %dataall=load('accelerate.txt');
 %dbscan_cluster_idx = dataall (:,1);
 %dataall = points;
-dataall=mapminmax(dataall',1,10)';
+%dataall=mapminmax(dataall',1,10)';
 
-%bean
-% data_idx=dataall(:,16);
-% dataall =mapminmax(dataall(:,1:16)',1,10)';
-%dataall=[dataall,data_idx];
-% [coeff, score]= pca(dataall(:,1:16)); 
-% res = score(:, 1:2);
-% %res=[res(:,1).*10,res(:,2),res(:,3)];
-% dataall=res;
-%dbscan_cluster_idx=dbscan(dataall,0.4,80);
-% figure(),gscatter(dataall(:,1),dataall(:,2),dbscan_cluster_idx);
-
-%%accelerate
-% data_idx=dataall(:,1);
-% dataall =mapminmax(dataall',1,10)';
-% [coeff, score]= pca(dataall(:,1:5)); 
-% res = score(:, 1:3);
-% dataall= res;
-% dbscan_cluster_idx=dbscan(dataall,1,30);
-% figure(),scatter(dataall(:,1),dataall(:,2), dbscan_cluster_idx);
 
 %% parameters
 sample_nNeighbors = 23;        % nNeighborsIndex is how many neighbors used to create the knn index, and must be >= nNeighbors + 1
@@ -70,18 +51,6 @@ for i = 1:n
     ori_sample_cell{1, i} = datasample(dataall, sample);       %数据随机抽取样本
 end
 
-% for i = 1:n
-%     ori_sample_cell{1, i} = datasample(dataall, sample);       %数据随机抽取样本
-%     sample_data = ori_sample_cell{1, i};
-%     sample_idx_cell{1,i}=sample_data(:,17);
-%     sample_cell{1, i}=sample_data(:,1:16);
-%     [coeff, score]= pca(sample_data(:,1:16)); 
-%     res = score(:, 1:2);
-%     %res=[res(:,1).*10,res(:,2),res(:,3)];
-%     ori_sample_cell{1, i}=res;
-% end
- %figure(),gscatter(ori_sample_cell{1,1}(:,1),ori_sample_cell{1,1}(:,2),sample_idx_cell{1,1});
-
 
 %% Clustering of samples
 Allcenter = zeros(array_size,dimension);                    % Center Points
@@ -101,9 +70,6 @@ for i = 1:n
     noise=rnndbscan.Outliers;
     cluster_idx{1,i}=rnndbscan.Labels;
     
-    % [cluster_idx{1, i} ,~]= kmeans(ori_sample, 9 );
-    % figure(),gscatter(ori_sample(:,1),ori_sample(:,2),cluster_idx{1,i});
-    %figure(),drawshapes3d(ori_sample,cluster_idx{1,i},sample);
       
     label = unique(cluster_idx{1, i});
     len=length(label);              % the number of clusters
@@ -135,12 +101,6 @@ end
 %% clustering of local representative
 all_representative = [Allcenter,MinDistance,MaxDistance,MeanDistance];     % local representative
 
-% all_representative_PCA =mapminmax(all_representative',1,10)';       % normalize
-% [coeff, score] = pca(all_representative_PCA);     % dimensionality reduction
-% res = score(:, 1:3);
-% all_representative_PCA = res;
-% 
-% rnndbscan = RnnDbscan(all_representative_PCA , rep_nNeighbors, rep_nNeighborsIndex);
 
 rnndbscan = RnnDbscan(all_representative , rep_nNeighbors, rep_nNeighborsIndex);
 rnndbscan.cluster
@@ -148,9 +108,7 @@ rnndbscan.cluster
 cluster=rnndbscan.Clusters;
 noise=rnndbscan.Outliers;
 rep_cluster_idx=rnndbscan.Labels;
-%final_representative_centers
-%figure(),gscatter(all_representative_PCA(:,1), all_representative_PCA(:,2),rep_cluster_idx);
-%figure(),drawshapes3d(all_representative_PCA,rep_cluster_idx,n_rep);
+
  
 rep_uni_label = unique(rep_cluster_idx);
 cluster_num=length(rep_uni_label);              % the number of clusters
@@ -174,18 +132,8 @@ for j = 1:cluster_num
         end  
 end
 
-% zeroRows = any(label_id_of_rep_within_same_category == 0, 2);
-% label_id_of_rep_within_same_category(zeroRows, :) = [];
-% matrix_center_of_rep_within_same_category(zeroRows, :) = [];
-% zeroIndices = find(zeroRows);
-    
 [overall_label] = calculateClusterLabels_Large(dataall, matrix_center_of_rep_within_same_category,label_id_of_rep_within_same_category);
 toc
 
-% zeroRows = any(dbscan_cluster_idx == -1, 2);
-% dbscan_cluster_idx(zeroRows, :) = [];
-% overall_label(zeroRows, :) = [];
-% zeroIndices = find(zeroRows);
-%figure(),gscatter(dataall(:,1),dataall(:,2),all_label);
   
 
