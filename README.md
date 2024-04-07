@@ -42,11 +42,11 @@ Step2:
 Adjust the appropriate parameters such as n (number of samples), sample (number of samples), sample_nNeighbors (RNN parameter for sample clustering), rep_nNeighbors (RNN parameter for global clustering), and perform clustering.
 ```matlab
 %% parameters
-sample_nNeighbors = 23;        % nNeighborsIndex is how many neighbors used to create the knn index, and must be >= nNeighbors + 1
+sample_nNeighbors = 50;        % nNeighborsIndex is how many neighbors used to create the knn index, and must be >= nNeighbors + 1
 sample_nNeighborsIndex = sample_nNeighbors + 1; % Because the index includes self-edges (each point is its own nearest neighbor)
-rep_nNeighbors = 25;
+rep_nNeighbors = 35;
 rep_nNeighborsIndex =rep_nNeighbors+1;
-n = 50;                            % Number of Distributed Sites
+n = 30;                            % Number of Distributed Sites
 sample = 400;                      % Number of samples
 array_size =120;
 [~,dimension]=size(dataall);
