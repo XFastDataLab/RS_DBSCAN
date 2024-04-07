@@ -9,9 +9,11 @@ Files
 ===================================================================================
 These program mainly containing:
 
--startup code named `Distrubted_C4Y.m` and `images_C4Y.m`.
+-startup code named `Huge_speed.m`.
 
--two main functions of C4Y named `SP.m` and `density2C.m`.
+-one main functions of C4Y named `calculateClusterLabels_Large.m`.
+
+-The main code for running the RNN-DBSCAN algorithm named `RnnDbscan.m` and `RNN-DBSCAN tests.ipynb`, main functions of RNN-DBSCAN named `knnIndexToGraphEdges.m`, `knngragh.m` and `knnindex.m`.
 
 -some data sets.
 
